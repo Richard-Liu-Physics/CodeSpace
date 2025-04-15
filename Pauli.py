@@ -1,11 +1,14 @@
 '''
 Created by Richard Liu, all rights reserved.
-Date: Oct 18, 2024
+Date: Apr 11, 2025
 '''
 import numpy as np
 from scipy.linalg import expm
+from scipy.sparse import csr_matrix,kron
 def Pauli(i: str):
-    'Define the Pauli matrix.'
+    '''
+    Define the Pauli matrix. i should be 'X' or 'Y' or 'Z' or 'I'
+    '''
     if i == 'I':
         return np.eye(2)
     elif i == 'X':
@@ -21,6 +24,14 @@ def Pauli_string(i: str) -> np.ndarray:
     tem = np.eye(1)
     for x in list_tem:
         tem = np.kron(tem, Pauli(x))
+    return tem
+
+def Pauli_string_sparse(i: str) -> csr_matrix:
+    'Define a sparse Pauli string according to string i which should be as "X Y X I Z"'
+    list_tem = i.split()
+    tem = csr_matrix(np.eye(1))
+    for x in list_tem:
+        tem = kron(tem, csr_matrix(Pauli(x)), format='csr')
     return tem
 
 def random_Pauli_vec():

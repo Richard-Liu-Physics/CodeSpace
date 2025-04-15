@@ -1,7 +1,7 @@
 '''
 Created by Richard Liu, all rights reserved.\n
 This module is used to generate some typical states. However, for the random quantum state, please refer to 'Random' module.\n
-Date: Oct 18, 2024
+Date: Apr 11, 2024
 '''
 import numpy as np
 
@@ -18,4 +18,11 @@ def W(N: int) -> np.ndarray:
     amplitude = 1 / np.sqrt(N)
     for i in range(N):
         tem[2**i] = amplitude
+    return tem
+
+def tilted_sigle(theta: float, phi:float) -> np.ndarray:
+    'Generate a tilted single qubit state'
+    tem = np.zeros(2, dtype=complex)
+    tem[0] = np.cos(theta/2)
+    tem[1] = np.exp(1j * phi) * np.sin(theta/2)
     return tem
