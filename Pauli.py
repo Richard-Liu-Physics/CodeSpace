@@ -1,6 +1,6 @@
 '''
 Created by Richard Liu, all rights reserved.
-Date: Apr 11, 2025
+Date: Sep 17, 2025
 '''
 import numpy as np
 from scipy.linalg import expm
@@ -32,6 +32,27 @@ def Pauli_string_sparse(i: str) -> csr_matrix:
     tem = csr_matrix(np.eye(1))
     for x in list_tem:
         tem = kron(tem, csr_matrix(Pauli(x)), format='csr')
+    return tem
+
+def Pauli_string_embed_sparse(op_map: dict, N: int) -> csr_matrix:
+    '''
+    Define a sparse Pauli string according to the operator map and total number of qubits.
+    Args:
+        op_map: A dictionary where keys are site indices (0-indexed) and values are 'X', 'Y', 'Z', or 'I'.
+        N: Total number of qubits.
+    Returns:
+        A sparse matrix representing the Pauli string.
+    Example:
+        op_map = {0: 'X', 2: 'Z'}
+        N = 4
+        This will create the operator X I Z I on 4 qubits.
+    '''
+    tem = csr_matrix(np.eye(1))
+    for i in range(N):
+        if i in op_map:
+            tem = kron(tem, csr_matrix(Pauli(op_map[i])), format='csr')
+        else:
+            tem = kron(tem, csr_matrix(Pauli('I')), format='csr')
     return tem
 
 def random_Pauli_vec():
