@@ -1,10 +1,10 @@
 '''
 Created by Richard Liu, all rights reserved.
-Date: Oct 18, 2024
+Date: Sep 18, 2025
 '''
 import numpy as np
 import qutip as qt
-import tqdm
+import tqdm.auto as tqdm
 
 def Haar_Density(N: int, k: int):
     'Calculate the k-copied density matrix for a Haar random state; N is the number of dimension'
@@ -27,7 +27,7 @@ def tracedist(state_list: list, k: int, D: int, timebar = True):
     Haar = Haar_Density(D,k)
     Den_ave = np.zeros((D**k,D**k))
     if timebar == True:
-        for i in tqdm.trange(len(state_list)):
+        for i in tqdm.range(len(state_list), desc="Calculating Trace Distance", leave=False, position=len(tqdm._instances)):
             Den_ave = Den_ave * i/(i+1)
             tem = np.outer(state_list[i],state_list[i].conj().T)
             Density_Matrix = np.eye(1)

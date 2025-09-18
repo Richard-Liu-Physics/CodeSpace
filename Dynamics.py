@@ -5,6 +5,7 @@ Date: Sep 18, 2025
 '''
 
 import numpy as np
+from tqdm.auto import tqdm
 
 def correlation_inf_temp(H:np.ndarray, TimeList:list, op: np.ndarray) -> np.ndarray:
     '''
@@ -25,7 +26,7 @@ def correlation_inf_temp(H:np.ndarray, TimeList:list, op: np.ndarray) -> np.ndar
     # Vectorized evaluation for all t
     C = np.zeros(len(TimeList), dtype=np.float64)
     d = H.shape[0]
-    for i in range(len(TimeList)):
+    for i in tqdm(range(len(TimeList)), desc="Calculating Correlation", leave=False, position=len(tqdm._instances)):
         t = TimeList[i]
         p = np.exp(1j * E * t)               # (d,)
         C[i] = (np.vdot(p, W @ p)).real / d  # <O(0)O(t)> = Tr[O(t)O(0)]/2^N
