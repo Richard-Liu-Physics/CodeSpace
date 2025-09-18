@@ -6,7 +6,7 @@ Date: Sep 18, 2025
 
 import numpy as np
 
-def correlation_inf_tem(H:np.ndarray, TimeList:list, op: np.ndarray) -> np.ndarray:
+def correlation_inf_temp(H:np.ndarray, TimeList:list, op: np.ndarray) -> np.ndarray:
     '''
     Calculate the correlation function at infinite temperature using exact diagonalization.
     Args:
