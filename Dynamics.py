@@ -1,7 +1,7 @@
 '''
 Created by Richard Liu, all rights reserved.\n
 This module is used to generate some typical functions related to many-body dynamics.\n
-Date: Sep 18, 2025
+Date: Sep 25, 2025
 '''
 
 import numpy as np
