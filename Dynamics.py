@@ -1,7 +1,7 @@
 '''
 Created by Richard Liu, all rights reserved.\n
 This module is used to generate some typical functions related to many-body dynamics.\n
-Date: Sep 25, 2025
+Date: Dec 3, 2025
 '''
 
 import numpy as np
@@ -36,3 +36,37 @@ def correlation_inf_temp(H:np.ndarray, TimeList:list, ops: list) -> list:
             C[i] = (np.vdot(p, W @ p)).real / d  # <O(0)O(t)> = Tr[O(t)O(0)]/2^N
         ans.append(C)
     return ans
+
+def gate_2site(i: int, j: int, psi: np.ndarray, U: np.ndarray) -> np.ndarray:
+    '''
+    Construct a two-site gate acting on sites i and j in an N-site system.
+    Args:
+        i: The first site index (0-based).
+        j: The second site index (0-based).
+        psi: The state vector of the N-site system as a numpy array.
+        U: The two-site gate as a 4x4 numpy array.
+    Returns:
+        The new state vector after applying the two-site gate.
+    '''
+    U = U.reshape(2,2,2,2)
+    Mini = min(i,j)
+    Maxi = max(i,j)
+    psi = psi.reshape([2**Mini, 2, 2**(Maxi-Mini-1), 2, -1])
+    psi = np.einsum('iajbk, abcd -> icjdk', psi, U)
+    psi = psi.reshape([-1])
+    return psi
+
+def apply_1site_gate(i: int, psi: np.ndarray, U: np.ndarray) -> np.ndarray:
+    '''
+    Apply a single-site gate to site i in an N-site system.
+    Args:
+        i: The site index (0-based).
+        psi: The state vector of the N-site system as a numpy array.
+        U: The single-site gate as a 2x2 numpy array.
+    Returns:
+        The new state vector after applying the single-site gate.
+    '''
+    psi = psi.reshape([2**i, 2, -1])
+    psi = np.einsum('iak, ab -> ibk', psi, U)
+    psi = psi.reshape([-1])
+    return psi

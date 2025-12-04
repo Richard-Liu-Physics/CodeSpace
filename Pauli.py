@@ -1,10 +1,25 @@
 '''
 Created by Richard Liu, all rights reserved.
-Date: Oct 14, 2025
+Date: Dec 3, 2025
 '''
 import numpy as np
 from scipy.linalg import expm
 from scipy.sparse import csr_matrix,kron,eye
+
+def CNOT() -> np.ndarray:
+    'Define the CNOT gate.'
+    tem = np.array([[1,0,0,0],
+                    [0,1,0,0],
+                    [0,0,0,1],
+                    [0,0,1,0]])
+    return tem
+
+def Hadamard() -> np.ndarray:
+    'Define the Hadamard gate.'
+    tem = (1/np.sqrt(2)) * np.array([[1,1],
+                                     [1,-1]])
+    return tem
+
 def Pauli(i: str):
     '''
     Define the Pauli matrix. i should be 'X' or 'Y' or 'Z' or 'I'

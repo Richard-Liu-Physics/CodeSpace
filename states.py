@@ -1,7 +1,7 @@
 '''
 Created by Richard Liu, all rights reserved.\n
 This module is used to generate some typical states. However, for the random quantum state, please refer to 'Random' module.\n
-Date: Sep 26, 2025
+Date: Dec 3, 2025
 '''
 import numpy as np
 import scipy.sparse as sp
@@ -33,6 +33,12 @@ def product_state(state_list: list) -> np.ndarray:
     tem = state_list[0]
     for state in state_list[1:]:
         tem = np.kron(tem, state)
+    return tem
+
+def all_zero_ket(N: int) -> np.ndarray:
+    'Generate a N-qubit all zero state ket'
+    tem = np.zeros(2**N)
+    tem[0] = 1.0
     return tem
 
 def expectation_value_real(state: np.ndarray, op: np.ndarray) -> float:
