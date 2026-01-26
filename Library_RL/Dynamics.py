@@ -1,7 +1,7 @@
 '''
 Created by Richard Liu, all rights reserved.\n
 This module is used to generate some typical functions related to many-body dynamics.\n
-Date: Dec 3, 2025
+Date: Jan 26, 2026
 '''
 
 import numpy as np
@@ -38,23 +38,19 @@ def correlation_inf_temp(H:np.ndarray, TimeList:list, ops: list) -> list:
     return ans
 
 def gate_2site(i: int, j: int, psi: np.ndarray, U: np.ndarray) -> np.ndarray:
-    '''
-    Construct a two-site gate acting on sites i and j in an N-site system.
-    Args:
-        i: The first site index (0-based).
-        j: The second site index (0-based).
-        psi: The state vector of the N-site system as a numpy array.
-        U: The two-site gate as a 4x4 numpy array.
-    Returns:
-        The new state vector after applying the two-site gate.
-    '''
-    U = U.reshape(2,2,2,2)
-    Mini = min(i,j)
-    Maxi = max(i,j)
-    psi = psi.reshape([2**Mini, 2, 2**(Maxi-Mini-1), 2, -1])
-    psi = np.einsum('iajbk, abcd -> icjdk', psi, U)
-    psi = psi.reshape([-1])
-    return psi
+    U = U.reshape(2, 2, 2, 2)  # U[a,b,c,d] : (in a,b) -> (out c,d)
+
+    if i < j:
+        psi = psi.reshape([2**i, 2, 2**(j-i-1), 2, -1])
+        psi = np.einsum('iajbk, abcd -> icjdk', psi, U)
+    else:
+        # embed on (j,i), but we want the logical ordering (i,j)
+        # so conjugate by SWAP at the tensor level: U'_{a b c d} = U_{b a d c}
+        U_swapped = U.transpose(1, 0, 3, 2)  # (b,a,d,c)
+        psi = psi.reshape([2**j, 2, 2**(i-j-1), 2, -1])
+        psi = np.einsum('iajbk, abcd -> icjdk', psi, U_swapped)
+
+    return psi.reshape(-1)
 
 def apply_1site_gate(i: int, psi: np.ndarray, U: np.ndarray) -> np.ndarray:
     '''

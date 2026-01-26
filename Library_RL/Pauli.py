@@ -1,6 +1,6 @@
 '''
 Created by Richard Liu, all rights reserved.
-Date: Dec 3, 2025
+Date: Jan 26, 2026
 '''
 import numpy as np
 from scipy.linalg import expm
@@ -18,6 +18,14 @@ def Hadamard() -> np.ndarray:
     'Define the Hadamard gate.'
     tem = (1/np.sqrt(2)) * np.array([[1,1],
                                      [1,-1]])
+    return tem
+
+def CZ() -> np.ndarray:
+    'Define the CZ gate.'
+    tem = np.array([[1,0,0,0],
+                    [0,1,0,0],
+                    [0,0,1,0],
+                    [0,0,0,-1]])
     return tem
 
 def Pauli(i: str):
